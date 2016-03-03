@@ -46,7 +46,8 @@ putInMemory(0xB000, 0x8014, 'd');
 putInMemory(0xB000, 0x8015, 0x4);
 
 
-interrupt(0x21,0,0,0,0);
+interrupt(0x21,1,line,0,0);
+interrupt(0x21,0,line,0,0);
 
 //readSector(buffer, 30);
 //printString(buffer);
@@ -140,5 +141,12 @@ int div(int a, int b){
 }
 
 void handleInterrupt21(int ax, int bx, int cx, int dx){
-	printString("Interrupt 21\0");
+	switch(ax){
+		case 0: printString(bx); break;
+		case 1: readString(bx); break;
+		case 2: readSector(bx,cx); break;
+		default: printString("error"); break;
+	}
 }
+
+
