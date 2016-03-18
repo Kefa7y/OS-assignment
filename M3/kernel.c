@@ -3,15 +3,18 @@ void readString(char*);
 void readSector(char*, int);
 void readFile(char*,char*);
 void handleInterrupt21(int, int, int , int );
+void executeProgram(char*, int);
+void terminate();
 
 char buffer[13312];
 
 int main(){
 
 	makeInterrupt21();
-	interrupt(0x21, 3, "messag\0", buffer, 0); /*read the file into buffer*/
-	interrupt(0x21, 0, buffer, 0, 0); /*print out the file*/
-
+	//interrupt(0x21, 3, "messag\0", buffer, 0); /*read the file into buffer*/
+	//interrupt(0x21, 0, buffer, 0, 0); /*print out the file*/
+	//interrupt(0x21, 4, "tstprg\0", 0x2000, 0);
+	//interrupt(0x21, 4, "tstpr2\0", 0x2000, 0);
 	while(1){
 	}
 }
@@ -26,7 +29,6 @@ void printString(char* chars){
 }
 
 void readString(char* chars){
-	// if(chars.length() < 80)return;
 	char c;
 	int i = 0;
 	while(c = interrupt(0x16,0,0,0,0)){
@@ -108,12 +110,29 @@ void readFile(char* array, char* buffer){
 	*buffer = *origin;
 }
 
+void executeProgram(char* name, int segment){
+	char buff[13312];
+	int i = 0;
+	readFile(name,buff);
+	while(i< 13312){
+		putInMemory(segment, i, buff[i]);
+		i++;
+	}
+	launchProgram(segment);
+}
+
+void terminate(){
+	while(1);
+}
+
 void handleInterrupt21(int ax, int bx, int cx, int dx){
 	switch(ax){
 		case 0: printString(bx); break;
 		case 1: readString(bx); break;
 		case 2: readSector(bx,cx); break;
 		case 3: readFile(bx,cx);break;
+		case 4: executeProgram(bx,cx);break;
+		case 5: terminate();
 		default: printString("error"); break;
 	}
 }
