@@ -1,4 +1,5 @@
 char line[74];
+char line2[80];
 char input1[14];
 char input2[7];
 char buffer[13312];
@@ -28,7 +29,7 @@ int main()
 		j=0;
 		for(i = 1; i<14; i++){
 			if(input1[i-1] == ' '){
-				input1[i-1]= '\0';	
+				input1[i-1]= '\0';
 				while(input1[i+j] != '\0'){
 					input2[j] = input1[i+j];
 					j++;
@@ -40,8 +41,8 @@ int main()
 
 
 		if(line[0] == 'v' && line[1]=='i' && line[2]=='e' && line[3]=='w' && line[5] != ' '){ //should return file not found in buffer with k=1
-					if( (input1[1] == '\0') || (input1[2] == '\0') 
-						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') )	{	
+					if( (input1[1] == '\0') || (input1[2] == '\0')
+						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') )	{
 						interrupt(0x21, 3, input1, buffer, 0);
 					if(buffer[0]=='\0')
 						interrupt(0x21, 0, "File is not found!\n\r", 0, 0);
@@ -53,10 +54,10 @@ int main()
 		}
 
 
-		else if(line[0]=='e' && line[1]=='x' && line[2]=='e' && line[3]=='c' 
+		else if(line[0]=='e' && line[1]=='x' && line[2]=='e' && line[3]=='c'
 					&& line[4]=='u' && line[5]=='t' && line[6]=='e' && line[8] != ' '){ //program doesn't terminate &&
 																			// if file is not found should print and not just try to run it
-					if( (input1[1] == '\0') || (input1[2] == '\0') 
+					if( (input1[1] == '\0') || (input1[2] == '\0')
 						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') )
 						interrupt(0x21, 4, input1, 0x2000, 0);
 					else
@@ -64,9 +65,9 @@ int main()
 		}
 
 
-		else if(line[0]=='d' && line[1]=='e' && line[2]=='l' 
+		else if(line[0]=='d' && line[1]=='e' && line[2]=='l'
 					&& line[3]=='e'&& line[4]=='t' && line[5]=='e' && line[7] != ' '){
-			if( (input1[1] == '\0') || (input1[2] == '\0') 
+			if( (input1[1] == '\0') || (input1[2] == '\0')
 						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') ){
 					interrupt(0x21, 3, input1, buffer, 0);
 					interrupt(0x21, 0, buffer, 0, 0);
@@ -105,7 +106,7 @@ int main()
 							input2[0]='\0';
 							k=1;
 							while(counter != 0){
-								input2[k++] = '0'+mod(counter,10); 
+								input2[k++] = '0'+mod(counter,10);
 								counter = div(counter,10);
 							}
 							k--;
@@ -120,18 +121,23 @@ int main()
 						i += 32;
 					}
 		}
-		
+
 
 		else if(line[0]=='c' && line[1]=='o' && line[2]=='p' && line[3]=='y' && line[5] != ' '){
-				if( ((input1[1] == '\0') || (input1[2] == '\0') 
+				if( ((input1[1] == '\0') || (input1[2] == '\0')
 						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0'))
-						&& ((input2[1] == '\0') || (input2[2] == '\0') 
+						&& ((input2[1] == '\0') || (input2[2] == '\0')
 						|| (input2[3] == '\0') || (input2[4] == '\0') || (input2[5] == '\0') || (input2[6] == '\0')) ){
-					interrupt(0x21, 3, input1, buffer, 0);
+						interrupt(0x21, 3, input1, buffer, 0);
 						if(buffer[0]=='\0')
 							interrupt(0x21, 0, "File is not found!\n\r", 0, 0);
+						else if (input2[0] == ' ' || input1[0] == ' ' || input2[0] == '\0')
+							interrupt(0x21, 0, "Enter a FileName\n\r", 0, 0);
 						else{
-							interrupt(0x21,8, input2, buffer, 1);
+							j = div(counter,512);
+							if(mod(counter,512) != 0)
+								j++;
+							interrupt(0x21,8, input2, buffer,1);
 							interrupt(0x21, 0, "Copied succsefully\n\r", 0, 0);
 						}
 					}
@@ -142,21 +148,39 @@ int main()
 
 		else if (line[0]=='c' && line[1]=='r' && line[2]=='e' && line[3]=='a'
 					&& line[4]=='t' && line[5]=='e' && line[7] != ' '){
-				if( (input1[1] == '\0') || (input1[2] == '\0') 
+				if( (input1[1] == '\0') || (input1[2] == '\0')
 						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') ){
-					interrupt(0x21, 1, buffer, 0, 0);
-					counter=0;
-					while(buffer[counter++] != '\0');
-					j = div(counter,512);
-					if(mod(counter,512) != 0)
-						j++;
-					interrupt(0x21,8, input1, buffer, j);
-					interrupt(0x21, 0, "Created succsefully\n\r", 0, 0);
+					interrupt(0x21, 3, input1, buffer, 0);
+					if(buffer[0]!='\0')
+						interrupt(0x21, 0, "File already found!\n\r", 0, 0);
+					else{
+						k = 0;
+						while(1){
+							i=0;
+							interrupt(0x21, 1, line2, 0, 0);
+							if(line2[0] == 0xa)
+								break;
+							else
+								while (line2[i] != '\0') {
+									buffer[k] = line2[i];
+									i++;
+									k++;
+								}
+							}
+						buffer[k] = '\0';
+						counter=0;
+						while(buffer[counter++] != '\0');
+						j = div(counter,512);
+						if(mod(counter,512) != 0)
+							j++;
+						interrupt(0x21,8, input1, buffer, j);
+						interrupt(0x21, 0, "Created succsefully\n\r", 0, 0);
+					}
 				}
 				else
 					interrupt(0x21, 0, "Maximum size for a file is 6 characters\n\r", 0, 0);
 		}
-		
+
 		else interrupt(0x21, 0, "Bad Command!\n\r", 0, 0);
 
 		interrupt(0x21,5, 0, 0, 0);

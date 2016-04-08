@@ -26,21 +26,21 @@ int main(){
 	// interrupt(0x21, 3, "messag\0", buffer, 0); // try to read messag
 	// interrupt(0x21, 0, buffer, 0, 0); //print out the contents of buffer
 
-	// buffer2[0]='h'; 
-	// buffer2[1]='e'; 
+	// buffer2[0]='h';
+	// buffer2[1]='e';
 	// buffer2[2]='l';
 	// buffer2[3]='l';
 	// buffer2[4]='o';
 	// for(i=5; i<13312; i++){
 	// 	buffer2[i]=0x0;
-	// } 
+	// }
 	// makeInterrupt21();
 	// interrupt(0x21,8, "testW\0", buffer2, 1); //write file testW
 	// interrupt(0x21,3, "testW\0", buffer1, 0); //read file testW
 	// interrupt(0x21,0, buffer1, 0, 0);
-	
+
 	makeInterrupt21();
-	interrupt(0x21,0, "Welcome to Team 33 
+	interrupt(0x21,0, "Welcome to Team 33
 		Os\n\r", 0, 0);
 	term[0]='s';
 	term[1]='h';
@@ -50,7 +50,7 @@ int main(){
 	term[5]='\0';
 	interrupt(0x21,4, term, 0x2000, 0);
 
-	
+
 
 	while(1){
 	}
@@ -72,7 +72,7 @@ void readString(char* chars){
 		while(c = interrupt(0x16,0,0,0,0)){
 
 				if(c == 0xd){
-					interrupt(0x10, 0xE*256 + 0xa, 0, 0, 0);//new line	
+					interrupt(0x10, 0xE*256 + 0xa, 0, 0, 0);//new line
 					interrupt(0x10, 0xE*256 + 0xd, 0, 0, 0);//move cursor to the left
 					chars[i] = 0xa;
 					i++;
@@ -81,7 +81,7 @@ void readString(char* chars){
 					chars[i] = 0x0;
 					i++;
 					return;
-				}		
+				}
 				if(c != 0x8){
 					interrupt(0x10, 0xE*256 + c, 0, 0, 0);
 					chars[i] = c;
@@ -95,8 +95,6 @@ void readString(char* chars){
 						i--;
 					}
 				}
-			
-			
 		}
 }
 
@@ -111,13 +109,13 @@ void readSector(char* buffer, int sector){
 
 	char* BX = buffer;
 
-	int CH = track; 
+	int CH = track;
 	int CL =  relSec;
 	int CX = CH*256+CL;
 
 	int DH = head;
 	int DL = 0;
-	int DX = DH*256+DL;	
+	int DX = DH*256+DL;
 
 	interrupt(0x13, AX, BX, CX, DX);
 }
@@ -185,20 +183,20 @@ void writeSector(char* buffer, int sector){
 
 	char* BX = buffer;
 
-	int CH = track; 
+	int CH = track;
 	int CL =  relSec;
 	int CX = CH*256+CL;
 
 	int DH = head;
 	int DL = 0;
-	int DX = DH*256+DL;	
+	int DX = DH*256+DL;
 
 	interrupt(0x13, AX, BX, CX, DX);
 }
 
 void writeFile(char* name, char* buffer, int secNum){
 	char map [512];
-	char dir [512];	
+	char dir [512];
 	int sectors [26];
 	int i = 0;
 	int s = 0;
@@ -254,7 +252,7 @@ void writeFile(char* name, char* buffer, int secNum){
 				break;
 			}
 		}
-		
+
 		for (i = 0; i < secNum; ++i)
 		{
 			interrupt(0x21, 6, buffer, sectors[i], 0);
