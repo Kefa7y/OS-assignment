@@ -45,12 +45,12 @@ int main()
 						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') )	{
 						interrupt(0x21, 3, input1, buffer, 0);
 					if(buffer[0]=='\0')
-						interrupt(0x21, 0, "File is not found!\n\r", 0, 0);
+						interrupt(0x21, 0, "$Error: File does not exist.\n\r", 0, 0);
 					else
 						interrupt(0x21, 0, buffer, 0, 0);
 					}
 					else
-						interrupt(0x21, 0, "Maximum size for a file is 6 characters\n\r", 0, 0);
+						interrupt(0x21, 0, "$Error: Maximum file name length is 6 characters.\n\r", 0, 0);
 		}
 
 
@@ -61,7 +61,7 @@ int main()
 						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') )
 						interrupt(0x21, 4, input1, 0x2000, 0);
 					else
-						interrupt(0x21, 0, "Maximum size for a file is 6 characters\n\r", 0, 0);
+						interrupt(0x21, 0, "$Error: Maximum file name length is 6 characters.\n\r", 0, 0);
 		}
 
 
@@ -70,21 +70,21 @@ int main()
 			if( (input1[1] == '\0') || (input1[2] == '\0')
 						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') ){
 					interrupt(0x21, 3, input1, buffer, 0);
-					interrupt(0x21, 0, buffer, 0, 0);
+					// interrupt(0x21, 0, buffer, 0, 0);
 					if(buffer[0] == '\0')
-						interrupt(0x21, 0, "File is not found!\n\r", 0, 0);
+						interrupt(0x21, 0, "$Error: File does not exist.\n\r", 0, 0);
 					else{
 						interrupt(0x21, 7, input1, 0, 0);
-						interrupt(0x21, 0, "Deleted succsefully\n\r", 0, 0);
+						interrupt(0x21, 0, "$File deleted succsefully.\n\r", 0, 0);
 					}
 				}
 					else
-						interrupt(0x21, 0, "Maximum size for a file is 6 characters\n\r", 0, 0);
+						interrupt(0x21, 0, "$Error: Maximum file name length is 6 characters.\n\r", 0, 0);
 		}
 
 
 		else if(line[0]=='d' && line[1]=='i' && line[2]=='r' && line[3]!=' '){
-					interrupt(0x21, 0, "FileName : Size(in sectors)\n\r", 0, 0);
+					interrupt(0x21, 0, "FileName : Size (in sectors)\n\r", 0, 0);
 					i = 0;
 					interrupt(0x21, 2, dir, 2, 0);
 					while(i<512){
@@ -130,9 +130,9 @@ int main()
 						|| (input2[3] == '\0') || (input2[4] == '\0') || (input2[5] == '\0') || (input2[6] == '\0')) ){
 						interrupt(0x21, 3, input1, buffer, 0);
 						if(buffer[0]=='\0')
-							interrupt(0x21, 0, "File is not found!\n\r", 0, 0);
+							interrupt(0x21, 0, "$Error: File does not exist.\n\r", 0, 0);
 						else if (input2[0] == ' ' || input1[0] == ' ' || input2[0] == '\0')
-							interrupt(0x21, 0, "Enter a FileName\n\r", 0, 0);
+							interrupt(0x21, 0, "$Error: You must enter a name for the copied file.\n\r", 0, 0);
 						else{
 							counter=0;
 							while(buffer[counter++] != '\0');
@@ -140,11 +140,11 @@ int main()
 							if(mod(counter,512) != 0)
 								j++;
 							interrupt(0x21,8, input2, buffer,j);
-							interrupt(0x21, 0, "Copied succsefully\n\r", 0, 0);
+							interrupt(0x21, 0, "$File copied succsefully.\n\r", 0, 0);
 						}
 					}
 					else
-						interrupt(0x21, 0, "Maximum size for a file is 6 characters or wrong parameters passed\n\r", 0, 0);
+						interrupt(0x21, 0, "$Error: Maximum file name length is 6 characters, or wrong parameters passed\n\r", 0, 0);
 		}
 
 
@@ -154,7 +154,7 @@ int main()
 						|| (input1[3] == '\0') || (input1[4] == '\0') || (input1[5] == '\0') || (input1[6] == '\0') ){
 					interrupt(0x21, 3, input1, buffer, 0);
 					if(buffer[0]!='\0')
-						interrupt(0x21, 0, "File already found!\n\r", 0, 0);
+						interrupt(0x21, 0, "$Error: A file with that name already exists.\n\r", 0, 0);
 					else{
 						k = 0;
 						while(1){
@@ -176,14 +176,14 @@ int main()
 						if(mod(counter,512) != 0)
 							j++;
 						interrupt(0x21,8, input1, buffer, j);
-						interrupt(0x21, 0, "Created succsefully\n\r", 0, 0);
+						interrupt(0x21, 0, "$File created succsefully.\n\r", 0, 0);
 					}
 				}
 				else
-					interrupt(0x21, 0, "Maximum size for a file is 6 characters\n\r", 0, 0);
+					interrupt(0x21, 0, "$Error: Maximum file name length is 6 characters.\n\r", 0, 0);
 		}
 
-		else interrupt(0x21, 0, "Bad Command!\n\r", 0, 0);
+		else interrupt(0x21, 0, "$Error: Bad command.\n\r", 0, 0);
 
 		interrupt(0x21,5, 0, 0, 0);
 		// interrupt(0x21,5,0,0,0);

@@ -15,6 +15,42 @@ char buffer2[13312];
 char term[6];
 
 int main(){
+	putInMemory(0xB000, 0x8000, 'H');
+	putInMemory(0xB000, 0x8001, 0x4);
+
+	putInMemory(0xB000, 0x8002, 'e');
+	putInMemory(0xB000, 0x8003, 0x4);
+
+	putInMemory(0xB000, 0x8004, 'l');
+	putInMemory(0xB000, 0x8005, 0x4);
+
+	putInMemory(0xB000, 0x8006, 'l');
+	putInMemory(0xB000, 0x8007, 0x4);
+
+	putInMemory(0xB000, 0x8008, 'o');
+	putInMemory(0xB000, 0x8009, 0x4);
+
+
+
+	putInMemory(0xB000, 0x800A, ' ');
+	putInMemory(0xB000, 0x800B, 0x4);
+
+
+
+	putInMemory(0xB000, 0x800C, 'W');
+	putInMemory(0xB000, 0x800D, 0x4);
+
+	putInMemory(0xB000, 0x800E, 'o');
+	putInMemory(0xB000, 0x800F, 0x4);
+
+	putInMemory(0xB000, 0x8010, 'r');
+	putInMemory(0xB000, 0x8011, 0x4);
+
+	putInMemory(0xB000, 0x8012, 'l');
+	putInMemory(0xB000, 0x8013, 0x4);
+
+	putInMemory(0xB000, 0x8014, 'd');
+	putInMemory(0xB000, 0x8015, 0x4);
 	// makeInterrupt21();
 	// interrupt(0x21, 3, "messag\0", buffer, 0); /*read the file into buffer*/
 	// interrupt(0x21, 0, buffer, 0, 0); /*print out the file*/
@@ -40,7 +76,7 @@ int main(){
 	// interrupt(0x21,0, buffer1, 0, 0);
 
 	makeInterrupt21();
-	interrupt(0x21,0, "Welcome to Team 33 Os\n\r", 0, 0);
+	interrupt(0x21,0, "Welcome to Team 33's OS.\n\r", 0, 0);
 	term[0]='s';
 	term[1]='h';
 	term[2]='e';
@@ -266,7 +302,6 @@ void deleteFile(char* name){
 	char map [512];
 	char dir [512];
 	int i = 0;
-	int del = 0;
 	interrupt(0x21, 2, map, 1, 0);
 	interrupt(0x21, 2, dir, 2, 0);
 
@@ -279,7 +314,6 @@ void deleteFile(char* name){
 		}
 		tempName[6] = '\0';
 		if(equals(name, tempName)==1){
-			del = 1;
 			dir[i] = 0x00;
 			while(j<32){
 				int x = dir[i+j];
@@ -309,7 +343,7 @@ void handleInterrupt21(int ax, int bx, int cx, int dx){
 		case 6: writeSector(bx,cx);break;
 		case 7: deleteFile(bx);break;
 		case 8: writeFile(bx,cx,dx);break;
-		default: printString("error"); break;
+		default: printString("Error!"); break;
 	}
 }
 
