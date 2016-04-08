@@ -134,10 +134,12 @@ int main()
 						else if (input2[0] == ' ' || input1[0] == ' ' || input2[0] == '\0')
 							interrupt(0x21, 0, "Enter a FileName\n\r", 0, 0);
 						else{
+							counter=0;
+							while(buffer[counter++] != '\0');
 							j = div(counter,512);
 							if(mod(counter,512) != 0)
 								j++;
-							interrupt(0x21,8, input2, buffer,1);
+							interrupt(0x21,8, input2, buffer,j);
 							interrupt(0x21, 0, "Copied succsefully\n\r", 0, 0);
 						}
 					}

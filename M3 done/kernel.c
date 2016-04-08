@@ -40,8 +40,7 @@ int main(){
 	// interrupt(0x21,0, buffer1, 0, 0);
 
 	makeInterrupt21();
-	interrupt(0x21,0, "Welcome to Team 33
-		Os\n\r", 0, 0);
+	interrupt(0x21,0, "Welcome to Team 33 Os\n\r", 0, 0);
 	term[0]='s';
 	term[1]='h';
 	term[2]='e';
