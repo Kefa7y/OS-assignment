@@ -1,0 +1,7 @@
+Delete: -dont print message being deleted
+
+Copy: -when is 'wrong parameters passed' the case? (mesh fahem emta hate7sal)
+
+Create: 
+1-First check if file name already exists, if it does print an error
+2-The command should repeatedly prompt you for a line of text until you enter an EMPTY LINE, not until you press enter. Read this part again.
