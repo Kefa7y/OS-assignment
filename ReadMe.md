@@ -5,18 +5,12 @@ and to be bootable on any normal x86 PC.
 The operating system is programmed primarily in C with a small amount of assembly functions.
 It contains no externally written functions or libraries; all the code is written exclusively for this project.</p>
 <br>
-<div>
-Made By:
-<br>
-Ahmed Anwar
-<br>
-Mohamed Ashraf
-<br>
-Mostafa Nagaty
-<br>
-Youssuf Radi
-<br>
-<br>
-<br>
-University: GUC
-</div>
+
+###Made By:
+ - [Ahmed Anwar](https://github.com/Ahmed-anwar)
+ - [Mohamed Ashraf](https://github.com/Kefa7y)
+ - [Mostafa Nagaty](https://github.com/moustafa-nagaty)
+ - [Youssuf Radi](http://youssufradi.github.io/)
+
+####University: GUC
+
